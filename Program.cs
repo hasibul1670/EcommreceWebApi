@@ -13,17 +13,35 @@ if (app.Environment.IsDevelopment()) // development e check korbe
 
 
 app.UseHttpsRedirection();
-app.MapGet("/", () => { return "based URL.."; });
-app.MapGet("/hello", () =>
+
+
+app.MapGet("/", () => { return "Backend Server is ON...."; });
+
+//Read Categories
+app.MapGet("/api/categories", () =>
 {
-    return "Hello from get endpoint:(/hello)";
+    return Results.Ok();
 });
 
-app.MapGet("/p/{id}", (int id) =>
-{
-    return $"hello text p {id}";
-});
-app.MapGet("/health", () => Results.Ok(new { Status = "Healthy", Timestamp = DateTime.UtcNow }));
-app.MapPost("/post", () => { return "Hello POST Method"; });
+
+
+
 app.Run();
 
+
+
+public record Category
+{
+    public Guid CategoryId { get; set; }
+    public string? Name { get; set; }
+    public string? Description { get; set; }
+
+    public DateTime CreatedAt { get; set; }
+}
+public record Product
+{
+    public Guid ProductId { get; set; }
+    public string Name { get; set; }
+    public string Description { get; set; }
+
+}
