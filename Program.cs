@@ -1,8 +1,13 @@
+using System.Data.Common;
 using Microsoft.AspNetCore.WebSockets;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlServer(
+        builder.Configuration.GetConnectionString("DefaultConnection")));
 
 var app = builder.Build();
 if (app.Environment.IsDevelopment()) // development e check korbe
@@ -15,12 +20,13 @@ if (app.Environment.IsDevelopment()) // development e check korbe
 app.UseHttpsRedirection();
 
 
-app.MapGet("/", () => { return "Backend Server is ON...."; });
+app.MapGet("/", () =>  "Backend Server is ON....");
 
 //Read Categories
-app.MapGet("/api/categories", () =>
+app.MapGet("/api/categories", async (AppDbContext db) =>
 {
-    return Results.Ok();
+    var categories = await db.Categories.ToListAsync();
+    return Results.Ok(categories);
 });
 
 
