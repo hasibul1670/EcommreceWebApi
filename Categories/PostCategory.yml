@@ -1,0 +1,22 @@
+info:
+  name: PostCategory
+  type: http
+  seq: 2
+
+http:
+  method: POST
+  url: http://localhost:5070/api/categories
+  body:
+    type: json
+    data: |2-
+       {
+          "name": "Baby Food",
+          "description": "Ab rem iste itaque amet minus iure dolor veniam cupiditate."
+        }
+  auth: inherit
+
+settings:
+  encodeUrl: true
+  timeout: 0
+  followRedirects: true
+  maxRedirects: 5

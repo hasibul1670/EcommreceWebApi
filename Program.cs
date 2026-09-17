@@ -28,12 +28,22 @@ app.MapGet("/api/categories", async (AppDbContext db) =>
     var categories = await db.Categories.ToListAsync();
     return Results.Ok(categories);
 });
+app.MapPost("/api/categories", async (Category category, AppDbContext db) =>
+{
+    db.Categories.Add(category);
+    await db.SaveChangesAsync();
+    return "Category Added!";
+});
 
 
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    await DbSeeder.SeedAsync(db);
+}
 
 
 app.Run();
-
 
 
 public record Category
@@ -49,5 +59,8 @@ public record Product
     public Guid ProductId { get; set; }
     public string Name { get; set; }
     public string Description { get; set; }
+    public Guid CategoryId { get; set; }
+    public Category? category { get; set; }
+
 
 }
